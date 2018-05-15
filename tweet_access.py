@@ -1,6 +1,7 @@
 import json
 import tweepy
 from tweepy import OAuthHandler
+from collections import Counter
 
 CONSUMER_KEY = '0qd3RPPkDEa9Mao5jznxWcpqN'
 CONSUMER_SECRET = 'n2U3psMWbCrewnk4tZmMyGknfBDoWGtCToD10uE6yg5C5iDLyA'
@@ -12,7 +13,7 @@ auth.set_access_token(OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
 api = tweepy.API(auth)
 
 count = 50
-query = 'Dublin'
+query = 'Weather'
 
 #Get all tweets for the search query
 results = [status for status in tweepy.Cursor(api.search, q=query).items(count)] # a list comprehension
@@ -31,10 +32,8 @@ words = [ word
                     for text in status_texts
                         for word in text.split() ]
                         
-print(json.dumps(status_texts[0:5], indent=1))
-print(json.dumps(screen_names[0:5], indent=1))
-print(json.dumps(hashtags[0:5], indent=1))
-print(json.dumps(words[0:5], indent=1))
-
+for entry in [screen_names, hashtags, words]:
+        counter = Counter(entry)
+        print(counter.most_common()[:10]) # the top 10 results
 
     
